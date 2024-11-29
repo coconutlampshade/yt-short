@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Shorts URL Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #cc0000;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>YouTube Shorts URL Converter</h1>
+        <input type="text" id="shortsUrl" placeholder="Enter YouTube Shorts URL">
+        <br>
+        <button onclick="convertUrl()">Convert</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function convertUrl() {
+            const input = document.getElementById('shortsUrl').value;
+            const videoId = input.match(/shorts\/([a-zA-Z0-9_-]+)/);
+            
+            if (videoId && videoId[1]) {
+                const regularUrl = `https://youtu.be/${videoId[1]}`;
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = `
+                    <p><strong>Regular YouTube URL:</strong></p>
+                    <p><a href="${regularUrl}" target="_blank">${regularUrl}</a></p>
+                    <button onclick="copyToClipboard('${regularUrl}')" style="background-color: #4CAF50;">Copy to Clipboard</button>
+                `;
+            } else {
+                document.getElementById('result').innerHTML = 
+                    '<p style="color: red;">Invalid YouTube Shorts URL</p>';
+            }
+        }
+
+        async function copyToClipboard(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                const copyButton = document.querySelector('#result button');
+                copyButton.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyButton.textContent = 'Copy to Clipboard';
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+            }
+        }
+    </script>
+</body>
+</html>
